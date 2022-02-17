@@ -1,0 +1,92 @@
+import {
+    ExtensionContext,
+    Uri,
+    window as Window,
+    workspace,
+    env
+} from 'vscode';
+import * as vscode from 'vscode';
+import { UserCancellationException } from './commandRunner';
+import { logger } from './logging';
+
+/**
+ * Show an error message and log it to the console
+ *
+ * @param message The message to show.
+ * @param options.outputLogger The output logger that will receive the message
+ * @param options.items A set of items that will be rendered as actions in the message.
+ * @param options.fullMessage An alternate message that is added to the log, but not displayed
+ *                           in the popup. This is useful for adding extra detail to the logs
+ *                           that would be too noisy for the popup.
+ *
+ * @return A promise that resolves to the selected item or undefined when being dismissed.
+ */
+export async function showAndLogErrorMessage(message: string, {
+    outputLogger = logger,
+    items = [] as string[],
+    fullMessage = undefined as (string | undefined)
+} = {}): Promise<string | undefined> {
+    return internalShowAndLog(dropLinesExceptInitial(message), items, outputLogger, Window.showErrorMessage, fullMessage);
+}
+
+function dropLinesExceptInitial(message: string, n = 2) {
+    return message.toString().split(/\r?\n/).slice(0, n).join('\n');
+}
+
+type ShowMessageFn = (message: string, ...items: string[]) => Thenable<string | undefined>;
+
+async function internalShowAndLog(
+    message: string,
+    items: string[],
+    outputLogger = logger,
+    fn: ShowMessageFn,
+    fullMessage?: string
+): Promise<string | undefined> {
+    const label = 'Show Log';
+    void outputLogger.log(fullMessage || message);
+    const result = await fn(message, label, ...items);
+    if (result === label) {
+        // outputLogger.show();
+    }
+    return result;
+}
+
+/**
+ * Show a warning message and log it to the console
+ *
+ * @param message The message to show.
+ * @param options.outputLogger The output logger that will receive the message
+ * @param options.items A set of items that will be rendered as actions in the message.
+ *
+ * @return A promise that resolves to the selected item or undefined when being dismissed.
+ */
+export async function showAndLogWarningMessage(message: string, {
+    outputLogger = logger,
+    items = [] as string[]
+} = {}): Promise<string | undefined> {
+    return internalShowAndLog(message, items, outputLogger, Window.showWarningMessage);
+}
+
+
+
+export async function getDockerPath(): Promise<string> {
+    return 'docker';
+}
+
+export async function getCurrentFolder(): Promise<string> {
+    if (vscode.workspace.workspaceFolders !== undefined) {
+        let wf = vscode.workspace.workspaceFolders[0].uri.path;
+        // let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+        // message = `YOUR-EXTENSION: folder: ${wf} - ${f}`;
+
+        // vscode.window.showInformationMessage(message);
+        return wf;
+    }
+    else {
+        // message = "YOUR-EXTENSION: Working folder not found, open a folder an try again";
+
+        // vscode.window.showErrorMessage(message);
+        return '';
+    }
+}
