@@ -6,7 +6,6 @@ import {
     env
 } from 'vscode';
 import * as vscode from 'vscode';
-import { UserCancellationException } from './commandRunner';
 import { logger } from './logging';
 
 /**
@@ -74,19 +73,23 @@ export async function getDockerPath(): Promise<string> {
 }
 
 export async function getCurrentFolder(): Promise<string> {
+    // if (vscode.workspace.workspaceFolders !== undefined) {
+    //     let wf = vscode.workspace.workspaceFolders[0].uri.path;
+    //     // let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+    //     // message = `YOUR-EXTENSION: folder: ${wf} - ${f}`;
+
+    //     // vscode.window.showInformationMessage(message);
+    //     return wf;
+    // }
+    // else {
+    //     // message = "YOUR-EXTENSION: Working folder not found, open a folder an try again";
+
+    //     // vscode.window.showErrorMessage(message);
+    //     return '';
+    // }
     if (vscode.workspace.workspaceFolders !== undefined) {
-        let wf = vscode.workspace.workspaceFolders[0].uri.path;
-        // let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-        // message = `YOUR-EXTENSION: folder: ${wf} - ${f}`;
-
-        // vscode.window.showInformationMessage(message);
-        return wf;
+        return vscode.workspace.workspaceFolders[0].uri.path;
     }
-    else {
-        // message = "YOUR-EXTENSION: Working folder not found, open a folder an try again";
-
-        // vscode.window.showErrorMessage(message);
-        return '';
-    }
+    return '';    
 }

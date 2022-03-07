@@ -10,7 +10,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:codeql-agent.scan"
+		"onCommand:codeql-agent.scan",
+		"onCommand:codeql-agent.scan-folder"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -18,8 +19,94 @@
 			{
 				"command": "codeql-agent.scan",
 				"title": "CodeQL Agent: Scan"
+			},
+			{
+				"command": "codeql-agent.scan-folder",
+				"title": "CodeQL Agent: Choose project folder to scan"
 			}
-		]
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "ql-agent-container",
+					"title": "CodeQL Agent",
+					"icon": "media/logo.svg"
+				}
+			]
+		},
+		"views": {
+			"ql-agent-container": [
+				{
+					"id": "codeQLProject",
+					"name": "Project"
+				},
+				{
+					"id": "codeQLSetup",
+					"name": "Configguration"
+				},
+				{
+					"id": "codeQLAstViewer",
+					"name": "AST Viewer"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "codeQLProject",
+				"contents": "Execute static application security testing (SAST) with CodeQL.\n[Scan](command:codeql-agent.scan) \n[Scan folder](command:codeql-agent.scan-folder)"
+			},
+			{
+				"view": "codeQLQueryHistory",
+				"contents": "Run the 'CodeQL: Run Query' command on a QL query.\n[Run Query](command:codeQL.runQuery)"
+			},
+			{
+				"view": "codeQLDatabases",
+				"contents": "Run the 'CodeQL Agent: View AST' command on an open source file from a CodeQL database.\n[View AST](command:codeQL.viewAst) .Add a CodeQL database:\n[From a folder](command:codeQLDatabases.chooseDatabaseFolder)\n[From an archive](command:codeQLDatabases.chooseDatabaseArchive)\n[From a URL (as a zip file)](command:codeQLDatabases.chooseDatabaseInternet)\n[From LGTM](command:codeQLDatabases.chooseDatabaseLgtm)"
+			}
+		],
+		"configuration": [{
+			"id": "cli",
+			"type": "object",
+			"title": "CLI",
+			"properties": {
+				"codeql-agent.cli.dockerExecutablePath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Dockeer executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable."
+				}
+			}
+		},
+		{
+			"id": "project",
+			"type": "object",
+			"title": "Project",
+			"properties": {
+				"codeql-agent.project.outputPath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the output folder. Default is ${currentProjectPath}/codeql-agent-results"
+				},
+				"codeql-agent.project.sourcePath": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the source for scanning. Please enter full path or choose from CodeQL Agent view. Default is current folder (empty input)."
+				},
+				"codeql-agent.project.overwrite": {
+					"type": "boolean",
+					"default": false,
+					"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcibly rebuild database."
+				},
+				"codeql-agent.project.language": {
+					"type":"string",
+					"default": "Auto detect",
+					"enum": ["cpp", "csharp", "go", "java", "javascript", "python", "ruby"]
+				}
+			}
+		}
+	]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -30,17 +117,17 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.64.0",
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "14.x",
+		"@types/vscode": "^1.64.0",
 		"@typescript-eslint/eslint-plugin": "^5.9.1",
 		"@typescript-eslint/parser": "^5.9.1",
+		"@vscode/test-electron": "^2.0.3",
 		"eslint": "^8.6.0",
 		"glob": "^7.2.0",
 		"mocha": "^9.1.3",
-		"typescript": "^4.5.4",
-		"@vscode/test-electron": "^2.0.3"
+		"typescript": "^4.5.5"
 	},
 	"dependencies": {
 		"@types/fs-extra": "^9.0.13",

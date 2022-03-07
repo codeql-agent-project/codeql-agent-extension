@@ -21,68 +21,59 @@ import {
 	Range,
 	workspace,
 	ProviderResult
-  } from 'vscode';
+} from 'vscode';
 
-import {
-	commandRunner,
-	commandRunnerWithProgress,
-	ProgressCallback,
-	withProgress,
-	ProgressUpdate
-  } from './commandRunner';
 import { resolve } from 'path';
-import { scan } from './cli';
-
+import { scan, cleanDockerContainer } from './cli';
+import { showAndLogErrorMessage } from './helpers';
+import { chooseProjectFolder, projectConfiguration } from './configuration';
 export function activate(context: vscode.ExtensionContext) {
-	
+
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "codeql-agent" is now active!');
 
-	context.subscriptions.push(commands.registerCommand('codeql-agent.scan', () => {
+	context.subscriptions.push(commands.registerCommand('codeql-agent.scan-folder', async () => {
+		await projectConfiguration.setSourcePath(await chooseProjectFolder());
+		let byFolder = true;
 		window.withProgress({
 			location: ProgressLocation.Notification,
-			title: "Scaning!",
+			title: `Scaning folder ${await projectConfiguration.getSourcePath(byFolder)} ...` ,
 			cancellable: true
 		}, async (progress, token) => {
 			token.onCancellationRequested(() => {
+				cleanDockerContainer();
+				console.log("User canceled the long running operation");
+			});
+			await scan(true);
+
+		});
+	}));
+
+	context.subscriptions.push(commands.registerCommand('codeql-agent.scan', async () => {
+		window.withProgress({
+			location: ProgressLocation.Notification,
+			title: `Scaning folder ${await projectConfiguration.getSourcePath()} ...` ,
+			cancellable: true
+		}, async (progress, token) => {
+			token.onCancellationRequested(() => {
+				cleanDockerContainer();
 				console.log("User canceled the long running operation");
 			});
 
-			// progress.report({ increment: 0 });
-
-			// setTimeout(() => {
-			// 	progress.report({ increment: 10, message: "I am long running! - still going..." });
-			// }, 1000);
-
-			// setTimeout(() => {
-			// 	progress.report({ increment: 40, message: "I am long running! - still going even more..." });
-			// }, 2000);
-
-			// setTimeout(() => {
-			// 	progress.report({ increment: 50, message: "I am long running! - almost there..." });
-			// }, 3000);
-			// await executeCommand('/usr/bin/sleep', ['10'], 'Run touch', logger);
-
-			// const p = new Promise<void>(resolve => {
-			// 	setTimeout(() => {
-			// 		resolve();
-			// 	}, 5000);
-			// });
 			await scan();
-			// const p = new Promise<void>(resolve => resolve());
-			// return p;
+
 		});
 	}));
 
 }
 
 
-function checkRequirement(){
+function checkRequirement() {
 	return true;
 }
 
 
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

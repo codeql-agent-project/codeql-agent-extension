@@ -4,11 +4,10 @@ import * as child_process from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
 import { fstat, existsSync } from 'fs';
+import { projectConfiguration, DOCKER_CONTAINER_NAME, OUTPUT_FOLDER, SUPPORT_LANGUAGES } from './configuration';
 
-let SUPPORT_LANGUAGES = ['cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby'];
-let OUTPUT_FOLDER = 'codeql-agent-result';
-let LANGUAGE = 'python';
-
+// let LANGUAGE = 'python';
+let OVERWRITE_FLAG = false;
 
 
 export async function executeCommand(
@@ -25,11 +24,11 @@ export async function executeCommand(
     try {
         void logger.log(`${description} using CodeQL Agent CLI: ${commandPath} ${argsString}...`);
         // const result = await promisify(child_process.execFile)(commandPath, args, {shell: true});
-        const result = child_process.execFile(commandPath, args, {shell: true});
-        result.stdout?.on('data', function(data) {
+        const result = child_process.execFile(commandPath, args, { shell: true });
+        result.stdout?.on('data', function (data) {
             logger.log(data);
         });
-        result.stderr?.on('data', function(data) {
+        result.stderr?.on('data', function (data) {
             logger.log(data);
         });
 
@@ -40,7 +39,7 @@ export async function executeCommand(
         //     }
         // });
 
-        const exitCode: number = await new Promise( (resolve, reject) => {
+        const exitCode: number = await new Promise((resolve, reject) => {
             result.on('close', resolve);
         });
         // void logger.log((await result).stderr);
@@ -55,12 +54,25 @@ export async function executeCommand(
 }
 
 
+export async function cleanDockerContainer() {
+    let dockerPath = await getDockerPath();
+    let args = [];
 
-export async function scan(src?: string, language?: string): Promise<boolean> {
+    args.push(
+        'rm',
+        '-f',
+        DOCKER_CONTAINER_NAME
+    );
+
+    await executeCommand(dockerPath, args, 'Clean up docker container', logger);
+}
+
+export async function scan(byFolder?: boolean, src?: string, language?: string): Promise<boolean> {
+    await cleanDockerContainer();
+
     let dockerPath = await getDockerPath();
     // let command = ['run', 'codeql-agent'];
     let args = [];
-    language = LANGUAGE;
 
     // Add command docker
     args.push('run');
@@ -71,28 +83,23 @@ export async function scan(src?: string, language?: string): Promise<boolean> {
     // Add container name
     args.push(
         '--name',
-        'codeql-agent-docker'
+        DOCKER_CONTAINER_NAME
     );
 
-    // Get source path
-    if (!src) {
-      src = await getCurrentFolder();
-    }
+    src = await projectConfiguration.getSourcePath(byFolder);
+    args.push(
+        '-v',
+        `"${src}:/opt/src"`
+    );
 
-    if (existsSync(src)) {
-        args.push(
-            '-v',
-            '"/tmp:/opt/src"'
-        );
-    } else {
-      showAndLogErrorMessage(`Could not found scan path: ${src}`);
-      return false;
+    // Check if overwrite database
+    if (OVERWRITE_FLAG) {
+        args.push('-e', '--overwrite');
     }
-
     // Set output
     args.push(
-      '-v',
-      `"${OUTPUT_FOLDER}:/opt/results"`
+        '-v',
+        `"${src}/${OUTPUT_FOLDER}:/opt/results"`
     );
 
     // Set language
@@ -107,22 +114,20 @@ export async function scan(src?: string, language?: string): Promise<boolean> {
             showAndLogErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
             return false;
         }
-    } else {
-      // vscode.window.showErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
-      showAndLogErrorMessage('Please specify the language');
-      return false;
-  }
+    }
 
     // Set FORMAT
     args.push(
-      '-e',
-      '"FORMAT=sarif-latest"'
+        '-e',
+        '"FORMAT=sarif-latest"'
     );
 
     // Set docker image
-    args.push('codeql-agent');
-    await executeCommand(dockerPath, args, 'Codeql scan', logger);
-
+    args.push('doublevkay/codeql-agent-dev');
+    logger.show();
+    if (dockerPath && args && logger) {
+        await executeCommand(dockerPath, args, 'Codeql scan', logger);
+    }
 
     return true;
 }
