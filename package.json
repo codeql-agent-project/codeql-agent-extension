@@ -85,7 +85,7 @@
 					"scope": "window",
 					"type": "string",
 					"default": "",
-					"markdownDescription": "Path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Dockeer executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable."
+					"markdownDescription": "Path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Docker executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable."
 				}
 			}
 		},
