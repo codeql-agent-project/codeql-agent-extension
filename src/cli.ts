@@ -1,9 +1,8 @@
 import { Logger, logger } from './logging';
-import { showAndLogErrorMessage, showAndLogWarningMessage, getDockerPath, getCurrentFolder } from './helpers';
+import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder } from './helpers';
 import * as child_process from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
-import { fstat, existsSync } from 'fs';
 import { projectConfiguration, DOCKER_CONTAINER_NAME, OUTPUT_FOLDER, SUPPORT_LANGUAGES } from './configuration';
 
 // let LANGUAGE = 'python';
@@ -55,7 +54,7 @@ export async function executeCommand(
 
 
 export async function cleanDockerContainer() {
-    let dockerPath = await getDockerPath();
+    let dockerPath = await projectConfiguration.getDockerPath();
     let args = [];
 
     args.push(
@@ -67,11 +66,7 @@ export async function cleanDockerContainer() {
     await executeCommand(dockerPath, args, 'Clean up docker container', logger);
 }
 
-export async function scan(byFolder?: boolean, src?: string, language?: string): Promise<boolean> {
-    await cleanDockerContainer();
-
-    let dockerPath = await getDockerPath();
-    // let command = ['run', 'codeql-agent'];
+async function setupArgs(): Promise<string[] | undefined> {
     let args = [];
 
     // Add command docker
@@ -86,7 +81,7 @@ export async function scan(byFolder?: boolean, src?: string, language?: string):
         DOCKER_CONTAINER_NAME
     );
 
-    src = await projectConfiguration.getSourcePath(byFolder);
+    let src = await projectConfiguration.getSourcePath();
     args.push(
         '-v',
         `"${src}:/opt/src"`
@@ -97,12 +92,27 @@ export async function scan(byFolder?: boolean, src?: string, language?: string):
         args.push('-e', '--overwrite');
     }
     // Set output
+    let outputPath = await projectConfiguration.getOutputPath();
+    if (outputPath === undefined) {
+        outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
+    }
     args.push(
         '-v',
-        `"${src}/${OUTPUT_FOLDER}:/opt/results"`
+        `"${outputPath}:/opt/results"`
     );
 
+    // Set overwrite flag
+    let overwriteFlag = await projectConfiguration.getOverwriteFlag();
+    if (overwriteFlag === true) {
+        args.push(
+            '-e',
+            `"OVERWRITE_FLAG=--overwrite"`
+        );
+    }
+
+
     // Set language
+    let language = await projectConfiguration.getLanguage();
     if (language && (language !== undefined)) {
         if (SUPPORT_LANGUAGES.includes(language)) {
             args.push(
@@ -112,7 +122,7 @@ export async function scan(byFolder?: boolean, src?: string, language?: string):
         } else {
             // vscode.window.showErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
             showAndLogErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
-            return false;
+            return undefined;
         }
     }
 
@@ -124,6 +134,17 @@ export async function scan(byFolder?: boolean, src?: string, language?: string):
 
     // Set docker image
     args.push('doublevkay/codeql-agent-dev');
+
+    return args;
+}
+
+export async function scan(): Promise<boolean> {
+    await cleanDockerContainer();
+
+    let dockerPath = await projectConfiguration.getDockerPath();
+    // let command = ['run', 'codeql-agent'];
+    let args = await setupArgs();
+
     logger.show();
     if (dockerPath && args && logger) {
         await executeCommand(dockerPath, args, 'Codeql scan', logger);
@@ -132,3 +153,20 @@ export async function scan(byFolder?: boolean, src?: string, language?: string):
     return true;
 }
 
+export async function buildDatabase(): Promise<boolean> {
+    await cleanDockerContainer();
+
+    let dockerPath = await projectConfiguration.getDockerPath();
+    // let command = ['run', 'codeql-agent'];
+    let args = await setupArgs();
+    args?.push(
+        '-e',
+        '"ACTION=create-database-only"'
+    );
+    logger.show();
+    if (dockerPath && args && logger) {
+        await executeCommand(dockerPath, args, 'Codeql build database', logger);
+    }
+
+    return true;
+}

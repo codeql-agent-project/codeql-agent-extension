@@ -68,10 +68,6 @@ export async function showAndLogWarningMessage(message: string, {
 
 
 
-export async function getDockerPath(): Promise<string> {
-    return 'docker';
-}
-
 export async function getCurrentFolder(): Promise<string> {
     // if (vscode.workspace.workspaceFolders !== undefined) {
     //     let wf = vscode.workspace.workspaceFolders[0].uri.path;

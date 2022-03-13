@@ -3,7 +3,7 @@ import { Uri } from 'vscode';
 import { getCurrentFolder, showAndLogErrorMessage, showAndLogWarningMessage } from './helpers';
 import { fstat, existsSync } from 'fs';
 export let SUPPORT_LANGUAGES = ['cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby'];
-export let OUTPUT_FOLDER = 'codeql-agent-result';
+export let OUTPUT_FOLDER = 'codeql-agent-results';
 export let DOCKER_CONTAINER_NAME = 'codeql-agent-docker';
 /**
  * Displays file selection dialog. Expects the user to choose a
@@ -39,9 +39,14 @@ class ProjectConfiguration {
     outputPath: string | undefined = undefined;
     overwrite: boolean = true;
     language: string | undefined = undefined;
+    dockerPath: string = 'docker';
 
     async setSourcePath(sourcePath: Uri | undefined): Promise<boolean> {
-        if (sourcePath === undefined || !existsSync(sourcePath.path)) {
+        if (sourcePath === undefined) {
+            this.sourcePath = undefined;
+            return true;
+        }
+        if (!existsSync(sourcePath.path)) {
             showAndLogErrorMessage("Invalid source path or source path does not exists.");
             return false;
         } else {
@@ -50,13 +55,7 @@ class ProjectConfiguration {
         }
     }
 
-    async getSourcePath(byFolder?: boolean): Promise<string> {
-        if (!byFolder) {
-            let configSourcePath: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.sourcePath');
-            if (configSourcePath !== '') {
-                this.sourcePath = configSourcePath;
-            }
-        }
+    async getSourcePath(): Promise<string> {
         if (this.sourcePath === undefined || this.sourcePath === '') {
             this.sourcePath = await getCurrentFolder();
         }
@@ -68,8 +67,37 @@ class ProjectConfiguration {
         return this.sourcePath;
     }
 
+    async getLanguage(): Promise<string | undefined> {
+        let configLanguage: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.language');
+        if (configLanguage === "Auto detect") {
+            return undefined;
+        } else { return configLanguage; };
+    }
 
+    async getOutputPath(): Promise<string | undefined> {
+        let configOutputPath: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
+        if (configOutputPath !== undefined && existsSync(configOutputPath)) {
+            return configOutputPath;
+        } else { return undefined; };
+    }
+
+    async getOverwriteFlag(): Promise<boolean> {
+        let configOverwriteFlag: boolean | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.overwriteFlag');
+        if (configOverwriteFlag === undefined) { return false; };
+        return configOverwriteFlag;
+    }
+
+    async getDockerPath(): Promise<string> {
+        let configDockerPath: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.cli.dockerExecutablePath');
+        if (configDockerPath !== undefined && configDockerPath !== '') {
+            if (existsSync(configDockerPath)) {
+                this.dockerPath = configDockerPath;
+            } else {
+                showAndLogErrorMessage("Can not found Docker executable path.");
+            }
+        } 
+        return this.dockerPath;
+    }
 }
-
 
 export let projectConfiguration = new ProjectConfiguration();

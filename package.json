@@ -11,7 +11,11 @@
 	],
 	"activationEvents": [
 		"onCommand:codeql-agent.scan",
-		"onCommand:codeql-agent.scan-folder"
+		"onCommand:codeql-agent.scan-folder",
+		"onCommand:codeql-agent.go-to-settings",
+		"onCommand:codeql-agent.build-database",
+		"onCommand:codeql-agent.build-database-folder",
+		"onCommand:codeql-agent.test"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -23,6 +27,22 @@
 			{
 				"command": "codeql-agent.scan-folder",
 				"title": "CodeQL Agent: Choose project folder to scan"
+			},
+			{
+				"command": "codeql-agent.go-to-settings",
+				"title": "CodeQL Agent: Go to settings"
+			},
+			{
+				"command": "codeql-agent.build-database",
+				"title": "CodeQL Agent: Build database only (current project)"
+			},
+			{
+				"command": "codeql-agent.build-database-folder",
+				"title": "CodeQL Agent: Build database only from folder"
+			},
+			{
+				"command": "codeql-agent.test",
+				"title": "CodeQL Agent: Test"
 			}
 		],
 		"viewsContainers": {
@@ -41,27 +61,19 @@
 					"name": "Project"
 				},
 				{
-					"id": "codeQLSetup",
-					"name": "Configguration"
-				},
-				{
-					"id": "codeQLAstViewer",
-					"name": "AST Viewer"
+					"id": "codeQLSettings",
+					"name": "Configuration"
 				}
 			]
 		},
 		"viewsWelcome": [
 			{
 				"view": "codeQLProject",
-				"contents": "Execute static application security testing (SAST) with CodeQL.\n[Scan](command:codeql-agent.scan) \n[Scan folder](command:codeql-agent.scan-folder)"
+				"contents": "Execute static application security testing (SAST) with CodeQL.\n[Scan](command:codeql-agent.scan) \n[Scan folder](command:codeql-agent.scan-folder) \n Build database only without executing SAST. \n[Build database](command:codeql-agent.build-database)\n[Build database from](command:codeql-agent.build-database-folder)"
 			},
 			{
-				"view": "codeQLQueryHistory",
-				"contents": "Run the 'CodeQL: Run Query' command on a QL query.\n[Run Query](command:codeQL.runQuery)"
-			},
-			{
-				"view": "codeQLDatabases",
-				"contents": "Run the 'CodeQL Agent: View AST' command on an open source file from a CodeQL database.\n[View AST](command:codeQL.viewAst) .Add a CodeQL database:\n[From a folder](command:codeQLDatabases.chooseDatabaseFolder)\n[From an archive](command:codeQLDatabases.chooseDatabaseArchive)\n[From a URL (as a zip file)](command:codeQLDatabases.chooseDatabaseInternet)\n[From LGTM](command:codeQLDatabases.chooseDatabaseLgtm)"
+				"view": "codeQLSettings",
+				"contents": "Go to settings: CLI, source, language, output,... \n[Settings](command:codeql-agent.go-to-settings)"
 			}
 		],
 		"configuration": [{
@@ -86,18 +98,12 @@
 					"scope": "window",
 					"type": "string",
 					"default": "",
-					"markdownDescription": "Path to the output folder. Default is ${currentProjectPath}/codeql-agent-results"
+					"markdownDescription": "Path to the output folder. Please enter full path. Default is ${currentProjectPath}/codeql-agent-results"
 				},
-				"codeql-agent.project.sourcePath": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the source for scanning. Please enter full path or choose from CodeQL Agent view. Default is current folder (empty input)."
-				},
-				"codeql-agent.project.overwrite": {
+				"codeql-agent.project.overwriteFlag": {
 					"type": "boolean",
 					"default": false,
-					"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcibly rebuild database."
+					"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database."
 				},
 				"codeql-agent.project.language": {
 					"type":"string",
