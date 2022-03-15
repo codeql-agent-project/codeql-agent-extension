@@ -66,7 +66,7 @@ export async function cleanDockerContainer() {
     await executeCommand(dockerPath, args, 'Clean up docker container', logger);
 }
 
-async function setupArgs(): Promise<string[] | undefined> {
+async function setupArgs(action?: string): Promise<string[] | undefined> {
     let args = [];
 
     // Add command docker
@@ -132,6 +132,15 @@ async function setupArgs(): Promise<string[] | undefined> {
         '"FORMAT=sarif-latest"'
     );
 
+    // Set ACTION
+    if (action) {
+        args.push(
+            '-e',
+            '"ACTION=create-database-only"'
+        );
+    }
+
+
     // Set docker image
     args.push('doublevkay/codeql-agent-dev');
 
@@ -158,11 +167,8 @@ export async function buildDatabase(): Promise<boolean> {
 
     let dockerPath = await projectConfiguration.getDockerPath();
     // let command = ['run', 'codeql-agent'];
-    let args = await setupArgs();
-    args?.push(
-        '-e',
-        '"ACTION=create-database-only"'
-    );
+    let args = await setupArgs("create-database-only");
+
     logger.show();
     if (dockerPath && args && logger) {
         await executeCommand(dockerPath, args, 'Codeql build database', logger);

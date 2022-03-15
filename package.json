@@ -3,9 +3,15 @@
 	"displayName": "CodeQL Agent",
 	"description": "",
 	"version": "0.0.1",
+	"icon": "media/icon-marketplace.png",
 	"engines": {
 		"vscode": "^1.64.0"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vovikhangcdv/codeql-agent-extension"
+	},
+	"publisher": "DoubleVKay",
 	"categories": [
 		"Other"
 	],
@@ -76,43 +82,52 @@
 				"contents": "Go to settings: CLI, source, language, output,... \n[Settings](command:codeql-agent.go-to-settings)"
 			}
 		],
-		"configuration": [{
-			"id": "cli",
-			"type": "object",
-			"title": "CLI",
-			"properties": {
-				"codeql-agent.cli.dockerExecutablePath": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Docker executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable."
+		"configuration": [
+			{
+				"id": "cli",
+				"type": "object",
+				"title": "CLI",
+				"properties": {
+					"codeql-agent.cli.dockerExecutablePath": {
+						"scope": "window",
+						"type": "string",
+						"default": "",
+						"markdownDescription": "Path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Docker executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable."
+					}
+				}
+			},
+			{
+				"id": "project",
+				"type": "object",
+				"title": "Project",
+				"properties": {
+					"codeql-agent.project.outputPath": {
+						"scope": "window",
+						"type": "string",
+						"default": "",
+						"markdownDescription": "Path to the output folder. Please enter full path. Default is ${currentProjectPath}/codeql-agent-results"
+					},
+					"codeql-agent.project.overwriteFlag": {
+						"type": "boolean",
+						"default": false,
+						"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database."
+					},
+					"codeql-agent.project.language": {
+						"type": "string",
+						"default": "Auto detect",
+						"enum": [
+							"cpp",
+							"csharp",
+							"go",
+							"java",
+							"javascript",
+							"python",
+							"ruby"
+						]
+					}
 				}
 			}
-		},
-		{
-			"id": "project",
-			"type": "object",
-			"title": "Project",
-			"properties": {
-				"codeql-agent.project.outputPath": {
-					"scope": "window",
-					"type": "string",
-					"default": "",
-					"markdownDescription": "Path to the output folder. Please enter full path. Default is ${currentProjectPath}/codeql-agent-results"
-				},
-				"codeql-agent.project.overwriteFlag": {
-					"type": "boolean",
-					"default": false,
-					"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database."
-				},
-				"codeql-agent.project.language": {
-					"type":"string",
-					"default": "Auto detect",
-					"enum": ["cpp", "csharp", "go", "java", "javascript", "python", "ruby"]
-				}
-			}
-		}
-	]
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
