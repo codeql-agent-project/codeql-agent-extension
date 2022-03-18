@@ -4,6 +4,7 @@ import * as child_process from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
 import { projectConfiguration, DOCKER_CONTAINER_NAME, OUTPUT_FOLDER, SUPPORT_LANGUAGES } from './configuration';
+import { outputFile } from 'fs-extra';
 
 // let LANGUAGE = 'python';
 let OVERWRITE_FLAG = false;
@@ -96,6 +97,7 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
     if (outputPath === undefined) {
         outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
     }
+    await executeCommand('mkdir', [outputPath], 'Create output foler', logger);
     args.push(
         '-v',
         `"${outputPath}:/opt/results"`
