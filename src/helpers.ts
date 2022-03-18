@@ -85,7 +85,7 @@ export async function getCurrentFolder(): Promise<string> {
     //     return '';
     // }
     if (vscode.workspace.workspaceFolders !== undefined) {
-        return vscode.workspace.workspaceFolders[0].uri.path;
+        return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return '';    
 }
