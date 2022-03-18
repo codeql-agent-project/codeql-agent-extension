@@ -97,7 +97,7 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
     if (outputPath === undefined) {
         outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
     }
-    await executeCommand('mkdir', [outputPath], 'Create output foler', logger);
+    await executeCommand('mkdir', [outputPath], 'Create output folder', logger);
     args.push(
         '-v',
         `"${outputPath}:/opt/results"`
