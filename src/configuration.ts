@@ -60,7 +60,7 @@ class ProjectConfiguration {
             this.sourcePath = await getCurrentFolder();
         }
         if (this.sourcePath === '' || !existsSync(this.sourcePath)) {
-            let error = new Error(`Invalid source path or source path does not exists.`);
+            let error = new Error(`Invalid source path or source path does not exists: ` + this.sourcePath);
             showAndLogErrorMessage(`${error.name}: ${error.message}`);
             throw error;
         }
