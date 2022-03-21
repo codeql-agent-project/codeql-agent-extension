@@ -87,6 +87,17 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
         '-v',
         `"${src}:/opt/src"`
     );
+    
+    // Pass userid, groupid to docker
+    args.push(
+        '-e',
+        `"USERID=$(id -u \${USER})"`
+    );
+    args.push(
+        '-e',
+        `"GROUPID=$(id -g \${USER})"`
+    );
+
 
     // Check if overwrite database
     if (OVERWRITE_FLAG) {

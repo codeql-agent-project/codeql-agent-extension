@@ -70,7 +70,7 @@ export async function showAndLogWarningMessage(message: string, {
 
 export async function getCurrentFolder(): Promise<string> {
     if (vscode.workspace.workspaceFolders !== undefined) {
-        return vscode.workspace.workspaceFolders[0].uri.path;
+        return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return '';    
 }
