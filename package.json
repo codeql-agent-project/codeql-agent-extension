@@ -20,8 +20,7 @@
 		"onCommand:codeql-agent.scan-folder",
 		"onCommand:codeql-agent.go-to-settings",
 		"onCommand:codeql-agent.build-database",
-		"onCommand:codeql-agent.build-database-folder",
-		"onCommand:codeql-agent.test"
+		"onCommand:codeql-agent.build-database-folder"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -45,10 +44,6 @@
 			{
 				"command": "codeql-agent.build-database-folder",
 				"title": "CodeQL Agent: Build database only from folder"
-			},
-			{
-				"command": "codeql-agent.test",
-				"title": "CodeQL Agent: Test"
 			}
 		],
 		"viewsContainers": {

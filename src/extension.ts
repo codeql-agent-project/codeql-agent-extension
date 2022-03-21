@@ -103,13 +103,6 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
-	// go-tosettings
-	context.subscriptions.push(commands.registerCommand('codeql-agent.test', async () => {
-		let ex = vscode.extensions.getExtension('oxsecurity.ox-ide');
-		let importedApi = ex?.exports;
-		console.log(importedApi);
-	}));
-
 	// go-to-settings
 	context.subscriptions.push(commands.registerCommand('codeql-agent.go-to-settings', async () => {
 		vscode.commands.executeCommand( 'workbench.action.openSettings', 'codeql-agent' );

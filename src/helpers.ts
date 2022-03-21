@@ -76,15 +76,15 @@ export async function getCurrentFolder(): Promise<string> {
 }
 
 export async function fixSchema(schemaPath: string): Promise<boolean> {
-    const fs = require('fs');
     const fileName = schemaPath;
-    const file = require(fileName);
+    const file = fs.readFileSync(fileName).toString();
+    let data = JSON.parse(file);
         
-    file.$schema = "http://json.schemastore.org/sarif-2.1.0-rtm.4";
+    data.$schema = "http://json.schemastore.org/sarif-2.1.0-rtm.4";
         
-    fs.writeFile(fileName, JSON.stringify(file), function writeJSON(err: Error) {
+    fs.writeFile(fileName, JSON.stringify(data), (err: any) => {
       if (err) {return console.log(err)};
-      console.log(JSON.stringify(file));
+      console.log(JSON.stringify(data));
     });
     return true;
 }
