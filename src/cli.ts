@@ -1,5 +1,5 @@
 import { Logger, logger } from './logging';
-import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder } from './helpers';
+import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder, fixSchema } from './helpers';
 import * as child_process from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
@@ -94,10 +94,7 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
     }
     // Set output
     let outputPath = await projectConfiguration.getOutputPath();
-    if (outputPath === undefined) {
-        outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
-    }
-    await executeCommand('mkdir', [outputPath], 'Create output folder', logger);
+
     args.push(
         '-v',
         `"${outputPath}:/opt/results"`
@@ -159,6 +156,8 @@ export async function scan(): Promise<boolean> {
     logger.show();
     if (dockerPath && args && logger) {
         await executeCommand(dockerPath, args, 'Codeql scan', logger);
+        let outputPath = await projectConfiguration.getOutputPath();
+        await fixSchema(outputPath+"/issues.sarif");
     }
 
     return true;

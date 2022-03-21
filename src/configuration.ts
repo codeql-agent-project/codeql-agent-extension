@@ -74,11 +74,12 @@ class ProjectConfiguration {
         } else { return configLanguage; };
     }
 
-    async getOutputPath(): Promise<string | undefined> {
+    async getOutputPath(): Promise<string> {
         let configOutputPath: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
-        if (configOutputPath !== undefined && existsSync(configOutputPath)) {
-            return configOutputPath;
-        } else { return undefined; };
+        if (configOutputPath === undefined || !existsSync(configOutputPath)) {
+            configOutputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
+        }
+        return configOutputPath;
     }
 
     async getOverwriteFlag(): Promise<boolean> {
