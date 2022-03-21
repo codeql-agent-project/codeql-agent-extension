@@ -7,7 +7,7 @@ import {
 } from 'vscode';
 import * as vscode from 'vscode';
 import { logger } from './logging';
-
+import * as fs from 'fs';
 /**
  * Show an error message and log it to the console
  *
@@ -69,23 +69,22 @@ export async function showAndLogWarningMessage(message: string, {
 
 
 export async function getCurrentFolder(): Promise<string> {
-    // if (vscode.workspace.workspaceFolders !== undefined) {
-    //     let wf = vscode.workspace.workspaceFolders[0].uri.path;
-    //     // let f = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-    //     // message = `YOUR-EXTENSION: folder: ${wf} - ${f}`;
-
-    //     // vscode.window.showInformationMessage(message);
-    //     return wf;
-    // }
-    // else {
-    //     // message = "YOUR-EXTENSION: Working folder not found, open a folder an try again";
-
-    //     // vscode.window.showErrorMessage(message);
-    //     return '';
-    // }
     if (vscode.workspace.workspaceFolders !== undefined) {
         return vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     return '';    
+}
+
+export async function fixSchema(schemaPath: string): Promise<boolean> {
+    const fs = require('fs');
+    const fileName = schemaPath;
+    const file = require(fileName);
+        
+    file.$schema = "http://json.schemastore.org/sarif-2.1.0-rtm.4";
+        
+    fs.writeFile(fileName, JSON.stringify(file), function writeJSON(err: Error) {
+      if (err) {return console.log(err)};
+      console.log(JSON.stringify(file));
+    });
+    return true;
 }
