@@ -36,7 +36,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// scan-folder
 	context.subscriptions.push(commands.registerCommand('codeql-agent.scan-folder', async () => {
-		await projectConfiguration.setSourcePath(await chooseProjectFolder());
+		let projectFolder = await chooseProjectFolder();
+		if (!projectFolder) {return;};
+		await projectConfiguration.setSourcePath(projectFolder);
 		window.withProgress({
 			location: ProgressLocation.Notification,
 			title: `Scaning folder ${await projectConfiguration.getSourcePath()} ...` ,
@@ -88,7 +90,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// build-database-folder
 	context.subscriptions.push(commands.registerCommand('codeql-agent.build-database-folder', async () => {
-		await projectConfiguration.setSourcePath(await chooseProjectFolder());
+		let projectFolder = await chooseProjectFolder();
+		if (!projectFolder) {return;};
+		await projectConfiguration.setSourcePath(projectFolder);
 		window.withProgress({
 			location: ProgressLocation.Notification,
 			title: `Build database from folder ${await projectConfiguration.getSourcePath()} ...` ,
