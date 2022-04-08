@@ -107,6 +107,21 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
         );
     }
 
+    // Set overwrite flag
+    let saveCache = await projectConfiguration.getSaveCache();
+    if (saveCache === true) {
+        args.push(
+            '-e',
+            `"SAVE_CACHE_FLAG=--save-cache"`
+        );
+    }
+    
+    // Set threads
+    let threads = await projectConfiguration.getThreads();
+    args.push(
+        '-e',
+        `"THREADS=${threads.toString()}"`
+    );
 
     // Set language
     let language = await projectConfiguration.getLanguage();
@@ -135,7 +150,6 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
             '"ACTION=create-database-only"'
         );
     }
-
 
     // Set docker image
     args.push('doublevkay/codeql-agent-dev');

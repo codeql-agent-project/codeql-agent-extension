@@ -107,6 +107,18 @@
 						"default": false,
 						"description": "Enable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database."
 					},
+					"codeql-agent.project.threads": {
+						"type": "number",
+						"default": 1,
+						"minimum": 0,
+						"maximum": 1024,
+						"description": "Use this many threads to build database and evaluate queries. \nDefaults to 1. You can pass 0 to use one thread per core on the machine."
+					},
+					"codeql-agent.project.saveCache": {
+						"type": "boolean",
+						"default": false,
+						"description": "Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time."
+					},
 					"codeql-agent.project.language": {
 						"type": "string",
 						"default": "Auto detect",

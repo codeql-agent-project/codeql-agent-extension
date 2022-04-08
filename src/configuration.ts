@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Uri } from 'vscode';
 import { getCurrentFolder, showAndLogErrorMessage, showAndLogWarningMessage } from './helpers';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 export let SUPPORT_LANGUAGES = ['cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby'];
 export let OUTPUT_FOLDER = 'codeql-agent-results';
 export let DOCKER_CONTAINER_NAME = 'codeql-agent-docker';
@@ -79,6 +79,9 @@ class ProjectConfiguration {
         this.outputPath = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
         if (this.outputPath === undefined || this.outputPath === '') {
             this.outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;
+            if (!existsSync(this.outputPath)){
+                mkdirSync(this.outputPath);
+            }
         }
         if (this.outputPath === '' || !existsSync(this.outputPath)) {
             let error = new Error(`Invalid output path or output path does not exists: ` + this.outputPath);
@@ -92,6 +95,18 @@ class ProjectConfiguration {
         let configOverwriteFlag: boolean | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.overwriteFlag');
         if (configOverwriteFlag === undefined) { return false; };
         return configOverwriteFlag;
+    }
+
+    async getSaveCache(): Promise<boolean> {
+        let configSaveCache: boolean | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.saveCache');
+        if (configSaveCache === undefined) { return false; };
+        return configSaveCache;
+    }
+
+    async getThreads(): Promise<string> {
+        let configThreads: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.threads');
+        if (configThreads === undefined) { return "1"; };
+        return configThreads;
     }
 
     async getDockerPath(): Promise<string> {
