@@ -76,11 +76,16 @@ class ProjectConfiguration {
     }
 
     async getOutputPath(): Promise<string> {
-        let configOutputPath: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
-        if (configOutputPath === undefined || !existsSync(configOutputPath)) {
-            configOutputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;  
+        this.outputPath = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
+        if (this.outputPath === undefined || this.outputPath === '') {
+            this.outputPath = `${await getCurrentFolder()}/${OUTPUT_FOLDER}`;
         }
-        return configOutputPath;
+        if (this.outputPath === '' || !existsSync(this.outputPath)) {
+            let error = new Error(`Invalid output path or output path does not exists: ` + this.outputPath);
+            showAndLogErrorMessage(`${error.name}: ${error.message}`);
+            throw error;
+        }
+        return this.outputPath;
     }
 
     async getOverwriteFlag(): Promise<boolean> {
