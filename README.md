@@ -26,8 +26,6 @@ This extension contributes the following settings:
 
 ## Release Notes
 
-### 1.0.0
-
-Initial release of CodeQL Agent
+[See details](https://github.com/vovikhangcdv/codeql-agent-extension/releases)
 
 **Enjoy!**
