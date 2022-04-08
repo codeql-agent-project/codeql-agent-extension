@@ -12,6 +12,7 @@ The extension is released. You can download it from the Visual Studio Marketplac
 ## Requirements
 
 CodeQL Agent based on [Docker](https://www.docker.com/). Executing CodeQL-Agent requires `root` or docker management privilege (see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) for more information).
+
 Please install [SARIF Viewer](https://github.com/microsoft/sarif-vscode-extension) to view SARIF results better.
 
 ## Extension Settings
