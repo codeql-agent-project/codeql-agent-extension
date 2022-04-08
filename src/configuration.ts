@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Uri } from 'vscode';
 import { getCurrentFolder, showAndLogErrorMessage, showAndLogWarningMessage } from './helpers';
-import { fstat, existsSync } from 'fs';
+import { existsSync } from 'fs';
 export let SUPPORT_LANGUAGES = ['cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby'];
 export let OUTPUT_FOLDER = 'codeql-agent-results';
 export let DOCKER_CONTAINER_NAME = 'codeql-agent-docker';

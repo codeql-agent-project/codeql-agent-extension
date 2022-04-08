@@ -4,23 +4,10 @@ import * as vscode from 'vscode';
 import { logger } from './logging';
 import { buildDatabase, executeCommand } from './cli';
 import {
-	CancellationToken,
-	CancellationTokenSource,
 	commands,
-	Disposable,
-	ExtensionContext,
-	extensions,
-	languages,
 	ProgressLocation,
-	ProgressOptions,
-	Uri,
 	window as Window,
-	env,
 	window,
-	QuickPickItem,
-	Range,
-	workspace,
-	ProviderResult
 } from 'vscode';
 
 import { resolve } from 'path';

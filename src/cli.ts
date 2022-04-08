@@ -1,18 +1,13 @@
 import { Logger, logger } from './logging';
 import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder, fixSchema } from './helpers';
 import * as child_process from 'child_process';
-import { promisify } from 'util';
-import * as vscode from 'vscode';
 import { projectConfiguration, DOCKER_CONTAINER_NAME, OUTPUT_FOLDER, SUPPORT_LANGUAGES } from './configuration';
-import { outputFile } from 'fs-extra';
 
-// let LANGUAGE = 'python';
 let OVERWRITE_FLAG = false;
 
 
 export async function executeCommand(
     commandPath: string,
-    // command: string[],
     commandArgs: string[],
     description: string,
     logger: Logger
@@ -32,18 +27,10 @@ export async function executeCommand(
             logger.log(data);
         });
 
-        // result.on('close', function(code) {
-        //     logger.log('Exit code: ' + code);
-        //     if (code !== null) {
-        //         exitCode = code;
-        //     }
-        // });
-
         const exitCode: number = await new Promise((resolve, reject) => {
             result.on('close', resolve);
         });
-        // void logger.log((await result).stderr);
-        // void logger.log((result.stdout);
+
         void logger.log('Run command succeeded.');
         return exitCode;
     } catch (err: any) {
@@ -130,7 +117,6 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
                 `"LANGUAGE=${language}"`
             );
         } else {
-            // vscode.window.showErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
             showAndLogErrorMessage('The language are not supported. Support language list: ' + SUPPORT_LANGUAGES.join(', '));
             return undefined;
         }
@@ -161,7 +147,6 @@ export async function scan(): Promise<boolean> {
     await cleanDockerContainer();
 
     let dockerPath = await projectConfiguration.getDockerPath();
-    // let command = ['run', 'codeql-agent'];
     let args = await setupArgs();
 
     logger.show();
@@ -178,7 +163,6 @@ export async function buildDatabase(): Promise<boolean> {
     await cleanDockerContainer();
 
     let dockerPath = await projectConfiguration.getDockerPath();
-    // let command = ['run', 'codeql-agent'];
     let args = await setupArgs("create-database-only");
 
     logger.show();
