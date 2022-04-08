@@ -15,6 +15,8 @@ CodeQL Agent based on [Docker](https://www.docker.com/). Executing CodeQL-Agent 
 
 Please install [SARIF Viewer](https://github.com/microsoft/sarif-vscode-extension) to view SARIF results better.
 
+## Usage
+![Sample](codeql-agent-usage-demo.gif)
 ## Extension Settings
 
 This extension contributes the following settings:
