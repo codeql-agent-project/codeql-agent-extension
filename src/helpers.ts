@@ -83,7 +83,7 @@ export async function fixSchema(schemaPath: string): Promise<boolean> {
     data.$schema = "http://json.schemastore.org/sarif-2.1.0-rtm.4";
         
     fs.writeFile(fileName, JSON.stringify(data), (err: any) => {
-      if (err) {return console.log(err)};
+      if (err) {return console.log(err);};
       console.log(JSON.stringify(data));
     });
     return true;

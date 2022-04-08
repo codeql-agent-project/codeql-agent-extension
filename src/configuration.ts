@@ -19,6 +19,7 @@ export async function chooseProjectFolder(byFolder: boolean = true): Promise<vsc
         canSelectFiles: !byFolder,
         canSelectFolders: byFolder,
         canSelectMany: false,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         filters: byFolder ? {} : { Archives: ['zip'] },
     });
     return getFirst(chosen);
