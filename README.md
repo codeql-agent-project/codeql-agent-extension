@@ -25,7 +25,7 @@ This extension contributes the following settings:
 * `codeql-agent.project.outputPath`: set path to the output folder. Please enter full path. Default is *${currentProjectPath}/codeql-agent-results*
 * `codeql-agent.project.overwriteFlag`: enable/disable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database.
 * `codeql-agent.project.language`: set project language to buidling database or execute SAST.
-* `codeql-agent.project.threads`: use this many threads to build database and evaluate queries. \nDefaults to 1. You can pass 0 to use one thread per core on the machine.
+* `codeql-agent.project.threads`: use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.
 * `codeql-agent.project.saveCache`: aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time.
 
 
