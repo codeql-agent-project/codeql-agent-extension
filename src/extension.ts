@@ -8,6 +8,8 @@ import {
 	ProgressLocation,
 	window as Window,
 	window,
+	extensions,
+	Uri
 } from 'vscode';
 
 import { resolve } from 'path';
@@ -38,7 +40,13 @@ export function activate(context: vscode.ExtensionContext) {
 			await scan();
 			await projectConfiguration.setSourcePath(undefined); // Reset sourcePath
 			checkRequirement();
-
+			let outputPath = await projectConfiguration.getOutputPath();
+			const sarifExt = extensions.getExtension('MS-SarifVSCode.sarif-viewer');
+			if (sarifExt != undefined && !sarifExt.isActive) {
+				await sarifExt.activate();
+				sarifExt.exports.openLogs([Uri.file(outputPath),]);
+			}
+			vscode.window.showInformationMessage("Scanning complete");
 		});
 	}));
 
@@ -55,6 +63,13 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 			await scan();
 			checkRequirement();
+			let outputPath = await projectConfiguration.getOutputPath();
+			const sarifExt = extensions.getExtension('MS-SarifVSCode.sarif-viewer');
+			if (sarifExt != undefined && !sarifExt.isActive) {
+				await sarifExt.activate();
+				sarifExt.exports.openLogs([Uri.file(outputPath+"/issues.sarif"),]);
+			}
+			vscode.window.showInformationMessage("Scanning complete");
 		});
 	}));
 
@@ -71,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 
 			await buildDatabase();
-
+			vscode.window.showInformationMessage("Create database complete");
 		});
 	}));
 
@@ -91,6 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 			await buildDatabase();
 			await projectConfiguration.setSourcePath(undefined); // Reset sourcePath
+			vscode.window.showInformationMessage("Create database complete");
 		});
 	}));
 

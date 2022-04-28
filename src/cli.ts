@@ -1,5 +1,5 @@
 import { Logger, logger } from './logging';
-import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder, fixSchema } from './helpers';
+import { showAndLogErrorMessage, showAndLogWarningMessage, getCurrentFolder } from './helpers';
 import * as child_process from 'child_process';
 import { projectConfiguration, DOCKER_CONTAINER_NAME, OUTPUT_FOLDER, SUPPORT_LANGUAGES } from './configuration';
 
@@ -166,8 +166,6 @@ export async function scan(): Promise<boolean> {
     logger.show();
     if (dockerPath && args && logger) {
         await executeCommand(dockerPath, args, 'Codeql scan', logger);
-        let outputPath = await projectConfiguration.getOutputPath();
-        await fixSchema(outputPath+"/issues.sarif");
     }
 
     return true;
