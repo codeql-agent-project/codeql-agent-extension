@@ -43,28 +43,27 @@ Here are some of the features that CodeQL Agent provides:
 
 - Execute CodeQL code scanning.
 - Automize creating CodeQL database.
-- Integrate CodeQL into GitLab CI/CD 
+- Integrate CodeQL into GitLab CI/CD.
 
 ## Requirements
 
-CodeQL Agent based on [Docker](https://www.docker.com/). Executing CodeQL Agent requires **root** privilege (open Visual Studio Code with root) or **Docker Management** privilege (see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) for more information).
+CodeQL Agent based on [Docker](https://www.docker.com/). Executing CodeQL Agent requires **root** privilege (open Visual Studio Code with root) or **Docker Management** privilege (see [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user) for more details).
 
-Please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) to view SARIF results better. 
+Please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) to view SARIF results. 
 
-You also can install [Output Colorizer](https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer) to colorize the output log. 
+You also can install [Output Colorizer](https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer) (optional) to colorize the output log. 
 
 ## Installation
 
 In Visual Studio Code, you can install CodeQL Agent on **Extensions View** (Ctrl + Shift + X) or you can download it from [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
 
-Before running CodeQL Agent, please make sure that you are checked [Requirements](#Requirements) before running the CodeQL Agent.
+Before running CodeQL Agent, please make sure that you are checked the [Requirements](#Requirements).
 
 ## Getting started
 
-
 1. Open your source code in Visual Studio Code.
 2. Click the **Scan** button on the extension view panel.
-3. CodeQL Agent execute code scanning automatically. It will take some time for the first run
+3. CodeQL Agent execute code scanning automatically. It will take some time for the first run.
 4. The results of code scanning will display on the **SARIF Viewer panel**.
 
 
@@ -80,9 +79,13 @@ The results of code scanning are stored at `codeql-agent-results` folder. It inc
 - `gl-sast-report.json`: the result Gitlab SAST Security Report Schemas file format.
 - `issues.sarif`: the result SARIF file format. 
 
-After code scanning completes, The SARIF Viewer Panel will show up automaticlly if it's already pre-installed. Otherwise, please install [SARIF Viewer]() then click to the `issues.sarif` file to view the results. 
+After code scanning is complete, The SARIF Viewer Panel will pop up automaticlly if it's already installed. Otherwise, please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) then click to the `issues.sarif` file to view the results. 
 
 ### Automize creating CodeQL database
+
+ Click the **Build database** button to build CodeQL database at your current folder. You also can choose other source code to scan by click the **Builld database from** button.
+
+ The created CodeQL database are stored at `codeql-agent-results/codeql-db`.
 
 ### Integrate CodeQL into GitLab CI/CD
 
@@ -100,7 +103,7 @@ codeql:
       sast: gl-sast-report.json
 ```
 
-*For more information and customization, please check out [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent).*
+*For more details and customization, please see [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent).*
  
 
 ## Configuration
