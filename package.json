@@ -1,7 +1,7 @@
 {
 	"name": "codeql-agent",
 	"displayName": "CodeQL Agent",
-	"description": "",
+	"description": "Simplify the usage of CodeQL and helps execute code scanning automatically",
 	"version": "0.5.3",
 	"icon": "media/icon-marketplace.png",
 	"engines": {

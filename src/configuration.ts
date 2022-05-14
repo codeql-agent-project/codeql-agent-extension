@@ -91,6 +91,11 @@ class ProjectConfiguration {
         return this.outputPath;
     }
 
+    async getSARIFResultPath(): Promise<string> {
+        let outputFolder = await this.getOutputPath();
+        return outputFolder + "/issues.sarif"
+    }
+
     async getOverwriteFlag(): Promise<boolean> {
         let configOverwriteFlag: boolean | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.overwriteFlag');
         if (configOverwriteFlag === undefined) { return false; };

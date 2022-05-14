@@ -18,10 +18,8 @@ import { getCurrentFolder, showAndLogErrorMessage, showAndLogWarningMessage } fr
 import { chooseProjectFolder, projectConfiguration } from './configuration';
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "codeql-agent" is now active!');
-	checkRequirement();
+
+	console.log('Codeql Agent is now active!');
 
 	// scan-folder
 	context.subscriptions.push(commands.registerCommand('codeql-agent.scan-folder', async () => {
@@ -39,13 +37,8 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 			await scan();
 			await projectConfiguration.setSourcePath(undefined); // Reset sourcePath
-			checkRequirement();
-			let outputPath = await projectConfiguration.getOutputPath();
-			const sarifExt = extensions.getExtension('MS-SarifVSCode.sarif-viewer');
-			if (sarifExt != undefined && !sarifExt.isActive) {
-				await sarifExt.activate();
-				sarifExt.exports.openLogs([Uri.file(outputPath),]);
-			}
+			let resultPath = await projectConfiguration.getSARIFResultPath();
+			openSarifViewerPannel(resultPath)
 			vscode.window.showInformationMessage("Scanning complete");
 		});
 	}));
@@ -62,13 +55,8 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log("User canceled the long running operation");
 			});
 			await scan();
-			checkRequirement();
-			let outputPath = await projectConfiguration.getOutputPath();
-			const sarifExt = extensions.getExtension('MS-SarifVSCode.sarif-viewer');
-			if (sarifExt != undefined && !sarifExt.isActive) {
-				await sarifExt.activate();
-				sarifExt.exports.openLogs([Uri.file(outputPath+"/issues.sarif"),]);
-			}
+			let resultPath = await projectConfiguration.getSARIFResultPath();
+			openSarifViewerPannel(resultPath)
 			vscode.window.showInformationMessage("Scanning complete");
 		});
 	}));
@@ -116,23 +104,23 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 }
 
-
-function checkRequirement() {
-	// Check dependency extension: MS-SarifVSCode.sarif-viewer
-	let sarifViewer = vscode.extensions.getExtension('MS-SarifVSCode.sarif-viewer');
-	if (sarifViewer === undefined) {
+async function openSarifViewerPannel(filePath: string){
+	const sarifExt = extensions.getExtension('MS-SarifVSCode.sarif-viewer');
+	if (sarifExt === undefined) {
 		vscode.window.showWarningMessage("Please install 'Sarif Viewer' to view SAST report better.", ...['Install'])
 		.then(install => {
 			if (install === "Install"){
 				commands.executeCommand('workbench.extensions.installExtension', 'MS-SarifVSCode.sarif-viewer');
 			}
 		});
+		return false;
 	}
-
+	if (!sarifExt.isActive) await sarifExt.activate();
+	await sarifExt.exports.openLogs([
+		Uri.file(filePath),
+	]);
 	return true;
 }
-
-
 
 // this method is called when your extension is deactivated
 export function deactivate() { }

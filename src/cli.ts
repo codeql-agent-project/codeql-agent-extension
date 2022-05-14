@@ -17,7 +17,7 @@ export async function executeCommand(
     const args = commandArgs;
     const argsString = args.join(' ');
     try {
-        void logger.log(`${description} using CodeQL Agent CLI: ${commandPath} ${argsString}...`);
+        void logger.log(`CodeQL Agent running ${description}: ${commandPath} ${argsString}...`);
         // const result = await promisify(child_process.execFile)(commandPath, args, {shell: true});
         const result = child_process.execFile(commandPath, args, { shell: true });
         result.stdout?.on('data', function (data) {
@@ -31,7 +31,7 @@ export async function executeCommand(
             result.on('close', resolve);
         });
 
-        void logger.log('Run command succeeded.');
+        // void logger.log('Run command succeeded.');
         return exitCode;
     } catch (err: any) {
         let error = new Error(`${description} failed: ${err.stderr || err}`);
@@ -158,8 +158,6 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
 }
 
 export async function scan(): Promise<boolean> {
-    await cleanDockerContainer();
-
     let dockerPath = await projectConfiguration.getDockerPath();
     let args = await setupArgs();
 
@@ -172,8 +170,6 @@ export async function scan(): Promise<boolean> {
 }
 
 export async function buildDatabase(): Promise<boolean> {
-    await cleanDockerContainer();
-
     let dockerPath = await projectConfiguration.getDockerPath();
     let args = await setupArgs("create-database-only");
 
