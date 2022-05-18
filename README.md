@@ -23,14 +23,16 @@
 
 ### Contents:
   - [Features](features)
-  - [Requiremennts](#requirements)
+  - [What is this for?](#what-is-this-for)
   - [Installation](#installation)
+  - [Requiremennts](#requirements)
   - [Getting started](#getting-started)
   - [Usage](#usage)
     - [Execute CodeQL code scanning](#execute-codeql-code-scanning)
     - [Automize creating CodeQL database](#automize-creating-codeql-database)
     - [Integrate CodeQL into GitLab CI/CD](#integrate-codeql-into-gitlab-cicd)
   - [Configuration](#configuration)
+  - [How does it work?](#how-does-it-work)
   - [Support](#support)
   - [Contributing](#contributing)
   - [Contributors](#contributors)
@@ -43,7 +45,21 @@ Here are some of the features that CodeQL Agent provides:
 
 - Execute CodeQL code scanning.
 - Automize creating CodeQL database.
-- Integrate CodeQL into GitLab CI/CD.
+- Integrate CodeQL into [GitLab CI/CD](https://docs.gitlab.com/ee/ci/).
+
+## What is this for?
+The extension is helpful for those who need:
+- Scanning your source code to check for known vulnerabilities.
+- Creating CodeQL database automatically to reduce the frustrating of the CodeQL usage.
+- Setting up [Gitlab CI/CD](https://docs.gitlab.com/ee/ci/) to apply [static application security testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/) for DevSecOps process.
+
+
+## Installation
+
+In Visual Studio Code, you can install CodeQL Agent on **Extensions View** (Ctrl + Shift + X) or you can download it from [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
+
+Before running CodeQL Agent, please make sure that you are checked the [Requirements](#Requirements).
+
 
 ## Requirements
 
@@ -53,19 +69,13 @@ Please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemNam
 
 You also can install [Output Colorizer](https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer) (optional) to colorize the output log. 
 
-## Installation
-
-In Visual Studio Code, you can install CodeQL Agent on **Extensions View** (Ctrl + Shift + X) or you can download it from [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
-
-Before running CodeQL Agent, please make sure that you are checked the [Requirements](#Requirements).
 
 ## Getting started
 
 1. Open your source code in Visual Studio Code.
 2. Click the **Scan** button on the extension view panel.
-3. CodeQL Agent execute code scanning automatically. It will take some time for the first run.
+3. CodeQL Agent executes code scanning automatically. It will take some time for the first time run (see [How does it work?](#how-does-it-work)).
 4. The results of code scanning will display on the **SARIF Viewer panel**.
-
 
 
 ## Usage
@@ -76,8 +86,8 @@ Before running CodeQL Agent, please make sure that you are checked the [Requirem
 
 The results of code scanning are stored at `codeql-agent-results` folder. It includes:
 - `codeql-db` folder: the codeql database built from the source code
-- `gl-sast-report.json`: the result Gitlab SAST Security Report Schemas file format.
-- `issues.sarif`: the result SARIF file format. 
+- `gl-sast-report.json`: the [Gitlab SAST Security Report Schemas](https://gitlab.com/gitlab-org/security-products/security-report-schemas) format result file.
+- `issues.sarif`: the SARIF format result file. 
 
 After code scanning is complete, The SARIF Viewer Panel will pop up automaticlly if it's already installed. Otherwise, please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) then click to the `issues.sarif` file to view the results. 
 
@@ -92,7 +102,7 @@ After code scanning is complete, The SARIF Viewer Panel will pop up automaticlly
 ![codeql-agent-gitlab-demo](media/codeql-agent-gitlab-demo.gif)
 
 
-You can integrate CodeQL into Gitlab CI/CD by setting up the `.gitlab-ci-cd.yml` file with the following template:
+You can integrate CodeQL into Gitlab CI/CD by setting up the `.gitlab-ci.yml` file with the following template:
 
 ```yaml
 codeql:
@@ -103,7 +113,7 @@ codeql:
       sast: gl-sast-report.json
 ```
 
-*For more details and customization, please see [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent).*
+*This is the feature of **CodeQL Agent for Docker**. For more details and customization, please see [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent).*
  
 
 ## Configuration
@@ -115,10 +125,14 @@ Click **Settings** button to move on to extensions setting panel. This extension
 `cli.dockerExecutablePath` | Set path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Docker executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable.
 `project.outputPath` | Set path to the output folder. Please enter full path. Default is *`${currentProjectPath}/codeql-agent-results`*
 `project.overwriteFlag` | Enable/disable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database.
-`project.language` | Set project language to buidling database or execute SAST.
+`project.language` | Set project language to building database or execute SAST.
 `project.threads` | Use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.
 `project.saveCache` | Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time.
 
+## How does it work?
+This extension is the interface of [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent) which is a docker image that helps execute CodeQL automatically.
+
+At the first time run, the CodeQL Agent extension pulls the docker image `doublevkay/codeql-agent-dev` to the local machine. A docker container will be created and run with the [options set by the user](#configuration).
 
 ## Support
 
