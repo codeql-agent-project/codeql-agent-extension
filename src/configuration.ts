@@ -75,6 +75,13 @@ class ProjectConfiguration {
         } else { return configLanguage; };
     }
 
+    async getJavaVersion(): Promise<string | undefined> {
+        let configLanguage: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.javaVersion');
+        if (configLanguage === "Auto") {
+            return undefined;
+        } else { return configLanguage; };
+    }
+
     async getOutputPath(): Promise<string> {
         this.outputPath = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
         if (this.outputPath === undefined || this.outputPath === '') {
@@ -110,7 +117,7 @@ class ProjectConfiguration {
 
     async getThreads(): Promise<string> {
         let configThreads: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.threads');
-        if (configThreads === undefined) { return "1"; };
+        if (configThreads === undefined) { return "0"; };
         return configThreads;
     }
 

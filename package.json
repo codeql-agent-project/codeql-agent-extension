@@ -109,10 +109,10 @@
 					},
 					"codeql-agent.project.threads": {
 						"type": "number",
-						"default": 1,
+						"default": 0,
 						"minimum": 0,
 						"maximum": 1024,
-						"description": "Use this many threads to build database and evaluate queries. \nDefaults to 1. You can pass 0 to use one thread per core on the machine."
+						"description": "Use this many threads to build database and evaluate queries. \nDefaults to 0. You can pass 0 to use one thread per core on the machine."
 					},
 					"codeql-agent.project.saveCache": {
 						"type": "boolean",
@@ -131,6 +131,21 @@
 							"python",
 							"ruby"
 						]
+					},
+					"codeql-agent.project.javaVersion": {
+						"type": "string",
+						"default": "Auto",
+						"enum": [
+							"8",
+							"11"
+						],
+						"markdownDescription": "Set the Java version, support Java 8 and Java 11. The default value is Java 11."
+					},
+					"codeql-agent.project.command": {
+						"scope": "window",
+						"type": "string",
+						"default": "",
+						"markdownDescription": "Path to the output folder. Please enter full path. Default is ${currentProjectPath}/codeql-agent-results"
 					}
 				}
 			}
