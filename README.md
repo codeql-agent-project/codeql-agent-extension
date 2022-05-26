@@ -128,6 +128,8 @@ Click **Settings** button to move on to extensions setting panel. This extension
 `project.language` | Set project language to building database or execute SAST.
 `project.threads` | Use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.
 `project.saveCache` | Aggressively save intermediate results to the disk cache. This may speed up subsequent queries if they are similar. Be aware that using this option will greatly increase disk usage and initial evaluation time.
+`project.command` | The command used when you create a CodeQL database for one or more compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder.
+`project.javaVersion` | Set the Java version, support Java 8 and Java 11. The default value is Java 11.
 
 ## How does it work?
 This extension is the interface of [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent) which is a docker image that helps execute CodeQL automatically.
