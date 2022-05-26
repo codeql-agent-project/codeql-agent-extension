@@ -145,7 +145,7 @@
 						"scope": "window",
 						"type": "string",
 						"default": "",
-						"markdownDescription": "Path to the output folder. Please enter full path. Default is ${currentProjectPath}/codeql-agent-results"
+						"markdownDescription": "The command used when you create a CodeQL database for one or more compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder."
 					}
 				}
 			}

@@ -76,10 +76,18 @@ class ProjectConfiguration {
     }
 
     async getJavaVersion(): Promise<string | undefined> {
-        let configLanguage: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.javaVersion');
-        if (configLanguage === "Auto") {
+
+        let javaVersion: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.javaVersion');
+        if (javaVersion === "Auto") {
             return undefined;
-        } else { return configLanguage; };
+        } else { return javaVersion; };
+    }
+
+    async getCommand(): Promise<string | undefined> {
+        let configCommand: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.command');
+        if (configCommand === undefined || configCommand === "") {
+            return undefined;
+        } else { return configCommand; };
     }
 
     async getOutputPath(): Promise<string> {
