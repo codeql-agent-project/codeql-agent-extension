@@ -123,7 +123,7 @@ Click **Settings** button to move on to extensions setting panel. This extension
 | Option  | Description |
 | ------- | ----------- |
 `cli.dockerExecutablePath` | Set path to the Docker executable that should be used by the CodeQL extension. If empty, the extension will look for a Docker executable on your shell PATH, or if Docker is not on your PATH, download and manage its own Docker executable.
-`project.outputPath` | Set path to the output folder. Please enter full path. Default is *`${currentProjectPath}/codeql-agent-results`*
+`project.outputPath` | Set path to the output folder. Please enter full path. The default is *`${currentProjectPath}/codeql-agent-results`*
 `project.overwriteFlag` | Enable/disable overwrite database when database path is exists and not an empty directory. This flag is useful for forcely rebuild database.
 `project.language` | Set project language to building database or execute SAST.
 `project.threads` | Use this many threads to build database and evaluate queries. Defaults to 1. You can pass 0 to use one thread per core on the machine.

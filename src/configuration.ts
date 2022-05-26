@@ -75,6 +75,21 @@ class ProjectConfiguration {
         } else { return configLanguage; };
     }
 
+    async getJavaVersion(): Promise<string | undefined> {
+
+        let javaVersion: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.javaVersion');
+        if (javaVersion === "Auto") {
+            return undefined;
+        } else { return javaVersion; };
+    }
+
+    async getCommand(): Promise<string | undefined> {
+        let configCommand: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.command');
+        if (configCommand === undefined || configCommand === "") {
+            return undefined;
+        } else { return configCommand; };
+    }
+
     async getOutputPath(): Promise<string> {
         this.outputPath = vscode.workspace.getConfiguration().get('codeql-agent.project.outputPath');
         if (this.outputPath === undefined || this.outputPath === '') {
@@ -110,7 +125,7 @@ class ProjectConfiguration {
 
     async getThreads(): Promise<string> {
         let configThreads: string | undefined = vscode.workspace.getConfiguration().get('codeql-agent.project.threads');
-        if (configThreads === undefined) { return "1"; };
+        if (configThreads === undefined) { return "0"; };
         return configThreads;
     }
 

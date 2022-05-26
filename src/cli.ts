@@ -75,6 +75,16 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
         `"${src}:/opt/src"`
     );
     
+    // Set Command
+    let command = await projectConfiguration.getCommand();
+    if (command !== undefined){
+        args.push(
+            '-e',
+            `"COMMAND=${command}"`
+        )
+    }
+
+
     // Pass userid, groupid to docker
     args.push(
         '-e',
@@ -97,6 +107,15 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
         '-v',
         `"${outputPath}:/opt/results"`
     );
+
+    // Set Java version
+    let javaVersion = await projectConfiguration.getJavaVersion();
+    if (javaVersion !== undefined) {
+        args.push(
+            '-e',
+            `"JAVA_VERSION=${javaVersion}"`
+        )
+    }
 
     // Set overwrite flag
     let overwriteFlag = await projectConfiguration.getOverwriteFlag();

@@ -109,10 +109,10 @@
 					},
 					"codeql-agent.project.threads": {
 						"type": "number",
-						"default": 1,
+						"default": 0,
 						"minimum": 0,
 						"maximum": 1024,
-						"description": "Use this many threads to build database and evaluate queries. \nDefaults to 1. You can pass 0 to use one thread per core on the machine."
+						"description": "Use this many threads to build database and evaluate queries. \nDefaults to 0. You can pass 0 to use one thread per core on the machine."
 					},
 					"codeql-agent.project.saveCache": {
 						"type": "boolean",
@@ -131,6 +131,21 @@
 							"python",
 							"ruby"
 						]
+					},
+					"codeql-agent.project.javaVersion": {
+						"type": "string",
+						"default": "Auto",
+						"enum": [
+							"8",
+							"11"
+						],
+						"markdownDescription": "Set the Java version, support Java 8 and Java 11. The default value is Java 11."
+					},
+					"codeql-agent.project.command": {
+						"scope": "window",
+						"type": "string",
+						"default": "",
+						"markdownDescription": "The command used when you create a CodeQL database for one or more compiled languages, omit if the only languages requested are Python and JavaScript. This specifies the build commands needed to invoke the compiler. If you don't set this variable, CodeQL will attempt to detect the build system automatically, using a built-in autobuilder."
 					}
 				}
 			}
