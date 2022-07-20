@@ -156,4 +156,5 @@ Contributions are always welcome! Just simply create merge request or contact me
 
 ## License
 
-CodeQL Agent is licensed under the [MIT license](https://github.com/vovikhangcdv/codeql-agent-extension/blob/main/LICENSE).
+CodeQL Agent is use CodeQL CLI as the core engine. Please follow the [GitHub CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) and take it as your own responsibility.
+
