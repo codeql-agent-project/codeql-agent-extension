@@ -44,7 +44,6 @@ Here are some of the features that CodeQL Agent provides:
 
 - Execute CodeQL code scanning.
 - Automize creating CodeQL database.
-- Integrate CodeQL into [GitLab CI/CD](https://docs.gitlab.com/ee/ci/).
 
 ## What is this for?
 The extension is helpful for those who need:
