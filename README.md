@@ -51,7 +51,6 @@ Here are some of the features that CodeQL Agent provides:
 The extension is helpful for those who need:
 - Scanning your source code to check for known vulnerabilities.
 - Creating CodeQL database automatically to reduce the frustrating of the CodeQL usage.
-- Setting up [Gitlab CI/CD](https://docs.gitlab.com/ee/ci/) to apply [static application security testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/) for DevSecOps process.
 
 
 ## Installation
@@ -86,7 +85,6 @@ You also can install [Output Colorizer](https://marketplace.visualstudio.com/ite
 
 The results of code scanning are stored at `codeql-agent-results` folder. It includes:
 - `codeql-db` folder: the codeql database built from the source code
-- `gl-sast-report.json`: the [Gitlab SAST Security Report Schemas](https://gitlab.com/gitlab-org/security-products/security-report-schemas) format result file.
 - `issues.sarif`: the SARIF format result file. 
 
 After code scanning is complete, The SARIF Viewer Panel will pop up automaticlly if it's already installed. Otherwise, please install [SARIF Viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) then click to the `issues.sarif` file to view the results. 
@@ -96,24 +94,6 @@ After code scanning is complete, The SARIF Viewer Panel will pop up automaticlly
  Click the **Build database** button to build CodeQL database at your current folder. You also can choose other source code to scan by click the **Builld database from** button.
 
  The created CodeQL database are stored at `codeql-agent-results/codeql-db`.
-
-### Integrate CodeQL into GitLab CI/CD
-
-![codeql-agent-gitlab-demo](media/codeql-agent-gitlab-demo.gif)
-
-
-You can integrate CodeQL into Gitlab CI/CD by setting up the `.gitlab-ci.yml` file with the following template:
-
-```yaml
-codeql:
-  image: doublevkay/codeql-agent-dev:latest
-  script: /root/scripts/analyze.sh
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-```
-
-*This is the feature of **CodeQL Agent for Docker**. For more details and customization, please see [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent).*
  
 
 ## Configuration
@@ -132,13 +112,13 @@ Click **Settings** button to move on to extensions setting panel. This extension
 `project.javaVersion` | Set the Java version, support Java 8 and Java 11. The default value is Java 11.
 
 ## How does it work?
-This extension is the interface of [CodeQL Agent for Docker](https://github.com/vovikhangcdv/codeql-agent) which is a docker image that helps execute CodeQL automatically.
+This extension is the interface of [CodeQL Agent for Docker](https://github.com/codeql-agent-project/codeql-agent) which is a docker image that helps execute CodeQL automatically.
 
 At the first time run, the CodeQL Agent extension pulls the docker image `doublevkay/codeql-agent-dev` to the local machine. A docker container will be created and run with the [options set by the user](#configuration).
 
 ## Support
 
-You can open an issue on the [GitHub repo](https://github.com/vovikhangcdv/codeql-agent-extension)
+You can open an issue on the [GitHub repo](https://github.com/codeql-agent-project/codeql-agent-extension)
 
 ## Contributing
 
@@ -146,13 +126,13 @@ Contributions are always welcome! Just simply create pull request or contact me 
     <img src="https://img.shields.io/twitter/url?style=for-the-badge&label=%40doublevkay&logo=twitter&logoColor=00AEFF&labelColor=black&color=7fff00&url=https%3A%2F%2Ftwitter.com%2Fdoublevkay">  </a>
 
 ## Contributors
-<a href="https://github.com/vovikhangcdv/codeql-agent-extension/graphs/contributors">
+<a href="https://github.com/codeql-agent-project/codeql-agent-extension/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=vovikhangcdv/codeql-agent-extension" />
 </a>
 
 ## Release Notes
 
-[See details](https://github.com/vovikhangcdv/codeql-agent-extension/releases)
+[See details](https://github.com/codeql-agent-project/codeql-agent-extension/releases)
 
 ## License
 
