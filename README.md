@@ -30,7 +30,6 @@
   - [Usage](#usage)
     - [Execute CodeQL code scanning](#execute-codeql-code-scanning)
     - [Automize creating CodeQL database](#automize-creating-codeql-database)
-    - [Integrate CodeQL into GitLab CI/CD](#integrate-codeql-into-gitlab-cicd)
   - [Configuration](#configuration)
   - [How does it work?](#how-does-it-work)
   - [Support](#support)
