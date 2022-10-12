@@ -22,7 +22,7 @@
 > This project is an extension for Visual Studio Code that simplifies the usage of CodeQL and helps execute code scanning automatically.
 
 ### Contents:
-  - [Features](features)
+  - [Features](#features)
   - [What is this for?](#what-is-this-for)
   - [Installation](#installation)
   - [Requiremennts](#requirements)
