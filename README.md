@@ -7,9 +7,9 @@
 
 
 
-[![Version](https://vsmarketplacebadges.dev/version/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
-[![Installs](https://vsmarketplacebadges.dev/installs/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
-[![Ratings](https://vsmarketplacebadges.dev/rating-star/DoubleVKay.codeql-agent.svg)](https://vsmarketplacebadge.apphb.com/rating-star/DoubleVKay.codeql-agent.svg)
+[![Version](https://vsmarketplacebadges.dev/version/DoubleVKay.codeql-agent.jpg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
+[![Installs](https://vsmarketplacebadges.dev/installs/DoubleVKay.codeql-agent.jpg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
+[![Ratings](https://vsmarketplacebadges.dev/rating-star/DoubleVKay.codeql-agent.jpg)](https://vsmarketplacebadge.apphb.com/rating-star/DoubleVKay.codeql-agent.svg)
 
 *An extension for Visual Studio Code that simplifies the usage of CodeQL*
 
