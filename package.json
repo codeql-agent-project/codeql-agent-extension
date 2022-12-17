@@ -2,7 +2,7 @@
 	"name": "codeql-agent",
 	"displayName": "CodeQL Agent",
 	"description": "Automatically build and scan code with CodeQL",
-	"version": "0.8.2",
+	"version": "0.9.0",
 	"icon": "media/icon-marketplace.png",
 	"engines": {
 		"vscode": "^1.64.0"
