@@ -171,7 +171,7 @@ async function setupArgs(action?: string): Promise<string[] | undefined> {
     }
 
     // Set docker image
-    args.push('doublevkay/codeql-agent-dev');
+    args.push('doublevkay/codeql-agent');
 
     return args;
 }

@@ -7,10 +7,9 @@
 
 
 
-[![Version](https://vsmarketplacebadge.apphb.com/version/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
-[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/IBM-Bluemix/vscode-log-output-colorizer/master/LICENSE)
-[![Ratings](https://vsmarketplacebadge.apphb.com/rating-star/DoubleVKay.codeql-agent.svg)](https://vsmarketplacebadge.apphb.com/rating-star/DoubleVKay.codeql-agent.svg)
+[![Version](https://vsmarketplacebadges.dev/version/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
+[![Installs](https://vsmarketplacebadges.dev/installs/DoubleVKay.codeql-agent.svg)](https://marketplace.visualstudio.com/items?itemName=DoubleVKay.codeql-agent)
+[![Ratings](https://vsmarketplacebadges.dev/rating-star/DoubleVKay.codeql-agent.svg)](https://vsmarketplacebadge.apphb.com/rating-star/DoubleVKay.codeql-agent.svg)
 
 *An extension for Visual Studio Code that simplifies the usage of CodeQL*
 
@@ -112,7 +111,7 @@ Click **Settings** button to move on to extensions setting panel. This extension
 ## How does it work?
 This extension is the interface of [CodeQL Agent for Docker](https://github.com/codeql-agent-project/codeql-agent) which is a docker image that helps execute CodeQL automatically.
 
-At the first time run, the CodeQL Agent extension pulls the docker image `doublevkay/codeql-agent-dev` to the local machine. A docker container will be created and run with the [options set by the user](#configuration).
+At the first time run, the CodeQL Agent extension pulls the docker image `doublevkay/codeql-agent` to the local machine. A docker container will be created and run with the [options set by the user](#configuration).
 
 ## Support
 
